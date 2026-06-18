@@ -16,6 +16,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - CI réorganisée en jobs (lint, type, security, docs, test matriciel) avec concurrency.
 - Pipeline de release `release.yml` : tag `v*` → PyPI public (OIDC) + Release GitHub.
 - Version dérivée du tag git via `hatch-vcs` (le tag est l'unique source de version).
+- Snapshots CI : Bandit en SARIF (onglet Security), job `build` de validation packaging,
+  artefacts couverture HTML + JUnit + doc HTML.
+- SBOM CycloneDX (via `pip-audit`) attaché aux Releases.
 
 ## [0.1.0] - 2026-06-18
 

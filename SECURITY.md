@@ -19,7 +19,9 @@ Merci d'inclure : description, étapes de reproduction, impact estimé, version 
 ## Mesures en place
 
 - Secrets hors du dépôt : `.env` gitignoré, hook `detect-private-key`.
-- Analyse statique **`bandit`** et audit des dépendances **`pip-audit`** (pre-commit + CI).
+- Analyse statique **`bandit`** (résultats publiés en **SARIF** dans l'onglet *Security*)
+  et audit des dépendances **`pip-audit`** (pre-commit + CI).
+- **SBOM** CycloneDX attaché à chaque Release.
 - Mises à jour automatisées des dépendances via **Dependabot**.
 - Passe de revue **Sécurité** conditionnelle avant fusion/release (voir
   `docs/workflow/roles/05-securite.md`).

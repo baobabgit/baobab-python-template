@@ -24,8 +24,13 @@ dist/
 .coverage.*
 htmlcov/
 coverage.xml
+junit*.xml
 .tox/
 .nox/
+
+# Rapports d'analyse (générés en CI)
+bandit.sarif
+sbom.json
 
 # Typage / lint caches
 .mypy_cache/

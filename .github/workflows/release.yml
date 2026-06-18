@@ -45,13 +45,25 @@ jobs:
       contents: write          # créer la Release + attacher les assets
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0       # hatch-vcs (install du paquet pour le SBOM)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
-      - name: Create GitHub Release (sdist + wheel attachés)
+      - name: Générer le SBOM (CycloneDX)
+        run: |
+          python -m pip install pip-audit .
+          pip-audit -f cyclonedx-json -o sbom.json
+        continue-on-error: true
+      - name: Create GitHub Release (dist + SBOM attachés)
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            dist/*
+            sbom.json
           generate_release_notes: true
           body: "Voir le CHANGELOG.md pour le détail des changements."
