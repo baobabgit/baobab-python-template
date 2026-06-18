@@ -13,8 +13,10 @@
   - mettre à jour `CHANGELOG.md` (section « BREAKING » si rupture d'API publique) ;
   - créer le **tag** `vX.Y.Z` (rupture d'API publique → **majeur**). Le tag *est* la
     version (`hatch-vcs`) — **ne pas** éditer de numéro dans `pyproject.toml`.
-  - Le tag déclenche `release.yml` : build → **PyPI public** (OIDC) +
-    **Release GitHub** avec `sdist`/`wheel` attachés.
+  - Le tag déclenche `release.yml` : build (avec attestation de provenance) →
+    **PyPI public** (OIDC) + **Release GitHub** avec `sdist`/`wheel` + SBOM attachés.
+  - Pour répéter sans risque : tag de **pré-release** (`vX.Y.Zrc1`) → publie sur
+    **TestPyPI** au lieu de PyPI.
 - Vérifier la santé de la CI / les PR Dependabot en attente.
 
 ## Definition of Done (+ U1, U2)

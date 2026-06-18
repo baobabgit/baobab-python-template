@@ -63,6 +63,7 @@ jobs:
         continue-on-error: true
       - name: Publier le SARIF dans l'onglet Security
         if: always()
+        continue-on-error: true   # tolère repo privé sans GitHub Advanced Security
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: bandit.sarif

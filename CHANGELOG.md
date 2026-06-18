@@ -19,6 +19,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - Snapshots CI : Bandit en SARIF (onglet Security), job `build` de validation packaging,
   artefacts couverture HTML + JUnit + doc HTML.
 - SBOM CycloneDX (via `pip-audit`) attaché aux Releases.
+- Durcissement release : TestPyPI sur pré-releases (`vX.Y.Zrc1`), attestation de
+  provenance (supply chain), upload SARIF tolérant (repo privé sans GHAS).
 
 ## [0.1.0] - 2026-06-18
 

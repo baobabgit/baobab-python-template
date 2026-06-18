@@ -1,17 +1,39 @@
 name: Release
 
 # Déclenché par un tag de version créé par le Release Manager (ex. v1.2.0).
+# Tag de pré-release (ex. v1.2.0rc1) → TestPyPI ; tag final → PyPI public.
 on:
   push:
     tags: ["v*"]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  meta:
     runs-on: ubuntu-latest
+    outputs:
+      prerelease: ${{ steps.detect.outputs.prerelease }}
+    steps:
+      - id: detect
+        run: |
+          if [[ "${GITHUB_REF_NAME}" =~ (rc|a|b|alpha|beta|dev)[0-9]*$ ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: meta
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write       # attestation de provenance
+      attestations: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # tag complet requis pour hatch-vcs
+          fetch-depth: 0     # tag complet requis pour hatch-vcs
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -19,17 +41,39 @@ jobs:
         run: |
           python -m pip install --upgrade build
           python -m build
+      - name: Attestation de provenance (supply chain)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "dist/*"
       - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
 
-  publish-pypi:
-    needs: build
+  publish-testpypi:
+    needs: [meta, build]
+    if: needs.meta.outputs.prerelease == 'true'
     runs-on: ubuntu-latest
-    environment: pypi          # protège la publication (approbation possible)
+    environment: testpypi
     permissions:
-      id-token: write          # Trusted Publishing (OIDC) — aucun token stocké
+      id-token: write       # Trusted Publishing (OIDC)
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    needs: [meta, build]
+    if: needs.meta.outputs.prerelease == 'false'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write       # Trusted Publishing (OIDC) — aucun token stocké
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -39,14 +83,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   github-release:
-    needs: build
+    needs: [meta, build]
     runs-on: ubuntu-latest
     permissions:
-      contents: write          # créer la Release + attacher les assets
+      contents: write       # créer la Release + attacher les assets
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0       # hatch-vcs (install du paquet pour le SBOM)
+          fetch-depth: 0     # hatch-vcs (install du paquet pour le SBOM)
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -66,4 +110,5 @@ jobs:
             dist/*
             sbom.json
           generate_release_notes: true
+          prerelease: ${{ needs.meta.outputs.prerelease == 'true' }}
           body: "Voir le CHANGELOG.md pour le détail des changements."
