@@ -11,6 +11,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - Retours du premier dogfood : `init.md` pointe vers `SETUP.md`, étape d'adaptation des
   métadonnées au CDC, réécriture de l'intro README à l'étape PO, décision explicite sur les
   placeholders, et badge Read the Docs neutralisé par défaut.
+- Règle « 1 classe = 1 fichier » : dérogation documentée pour les hiérarchies d'exceptions
+  (sous-package `exceptions/` par catégorie).
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).

@@ -9,6 +9,8 @@
 - Langage : **Python ≥ 3.11**, **orienté objet**. Respect de **SOLID**, composition > héritage.
 - **1 classe = 1 fichier.** Le module porte le nom de la classe en `snake_case`
   (`class FactureClient` → `facture_client.py`).
+  - *Dérogation* : une **hiérarchie d'exceptions** (classes courtes) peut être regroupée
+    dans un sous-package `exceptions/` organisé **par catégorie** (un fichier par famille).
 - Pas de logique exécutable au niveau module ; tout passe par des classes/méthodes.
 
 ## Librairie consommable (contrat d'API)
