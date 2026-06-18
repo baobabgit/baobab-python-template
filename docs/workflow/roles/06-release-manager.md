@@ -9,8 +9,12 @@
 
 ## Actions
 - **Fusionner** la PR (`Closes #`).
-- Si release : **bump SemVer** (rupture d'API publique → **majeur**), mettre à jour
-  `CHANGELOG.md` (section « BREAKING » si rupture), créer le **tag**.
+- Si release :
+  - mettre à jour `CHANGELOG.md` (section « BREAKING » si rupture d'API publique) ;
+  - créer le **tag** `vX.Y.Z` (rupture d'API publique → **majeur**). Le tag *est* la
+    version (`hatch-vcs`) — **ne pas** éditer de numéro dans `pyproject.toml`.
+  - Le tag déclenche `release.yml` : build → **PyPI public** (OIDC) +
+    **Release GitHub** avec `sdist`/`wheel` attachés.
 - Vérifier la santé de la CI / les PR Dependabot en attente.
 
 ## Definition of Done (+ U1, U2)
