@@ -36,6 +36,12 @@ jobs:
       - name: Type check (mypy)
         run: mypy
 
+      - name: Security — bandit (SAST)
+        run: bandit -c pyproject.toml -r src
+
+      - name: Security — pip-audit (dépendances)
+        run: pip-audit
+
       - name: Tests + coverage (>= 90%)
         run: pytest
 

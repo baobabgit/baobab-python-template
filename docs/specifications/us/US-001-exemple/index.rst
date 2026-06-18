@@ -5,6 +5,7 @@ US-001 — Saluer un utilisateur (exemple)
 
 :Statut: Exemple
 :Issue GitHub: ``[US-001]`` (à créer)
+:Origine: cahier des charges
 
 Récit
 -----

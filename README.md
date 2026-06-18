@@ -88,6 +88,7 @@ Besoin (docs/specifications, RST)
 ├── src/example_package/  # Code (1 classe par fichier)
 ├── tests/example_package/# Tests en miroir de src/
 ├── docs/                 # Sphinx : specifications/ · api/ · guides/
+│   └── workflow/         # Process multi-IA : rôles, gates, handoff, prompts
 ├── .github/              # CI + templates d'issues (US/FEAT/Task) + PR
 ├── pyproject.toml        # Config unique (projet, ruff, mypy, pytest, coverage)
 ├── .pre-commit-config.yaml
@@ -132,7 +133,8 @@ cp .env.example .env
 - **Aucun secret** dans le code ni dans Git : `.env` est gitignoré ; seul
   `.env.example` (sans valeurs) est versionné.
 - Le hook `detect-private-key` et `pre-commit` bloquent les fuites évidentes.
-- Signalez toute vulnérabilité en privé (voir `SECURITY.md` si présent) plutôt
+- Analyse `bandit` (SAST) + `pip-audit` (vulns des dépendances) + Dependabot.
+- Signalez toute vulnérabilité en privé (voir [`SECURITY.md`](SECURITY.md)) plutôt
   que via une issue publique.
 
 ## Contribuer

@@ -3,7 +3,7 @@
 .DEFAULT_GOAL := help
 PY ?= python
 
-.PHONY: help venv install lint format type test cov docs check clean
+.PHONY: help venv install lint format type test cov security docs check clean
 
 help: ## Affiche cette aide
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -29,6 +29,10 @@ test: ## Tests + couverture >= 90%
 	pytest
 
 cov: test ## Alias de test (couverture incluse)
+
+security: ## Analyse de sécurité (bandit + pip-audit)
+	bandit -c pyproject.toml -r src
+	pip-audit
 
 docs: ## Construit la documentation Sphinx (HTML)
 	sphinx-build -b html docs docs/_build/html

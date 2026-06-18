@@ -11,6 +11,15 @@
   (`class FactureClient` → `facture_client.py`).
 - Pas de logique exécutable au niveau module ; tout passe par des classes/méthodes.
 
+## Librairie consommable (contrat d'API)
+
+- Le livrable est une **librairie réutilisable**, susceptible d'être intégrée dans un
+  projet parent. Ce qui est exporté dans `__all__` est un **contrat**.
+- Rupture du contrat (suppression/modification incompatible d'un symbole public) →
+  **bump SemVer majeur** + entrée `CHANGELOG` « BREAKING » + note de migration.
+- Aucune hypothèse sur l'hôte : pas d'état global, config **injectée** (`pydantic-settings`).
+  Ce dépôt *expose*, il ne *dépend jamais* d'un projet parent.
+
 ## PEP 8 & PEP 20
 
 - Respect de **PEP 8** (style) et de **PEP 20** (Zen of Python : explicite, simple, lisible).
@@ -73,6 +82,19 @@
 - Chaîne d'identifiants propagée partout :
   **US-001** → **FEAT-001.1** → **TASK-001.1.1**
   (titres d'issues, branches, commits `Closes #<n>`, noms de tests, docstrings `:spec:`).
+- **Provenance** : chaque US/FEAT porte un champ `:origin:` (cahier des charges, ou projet
+  externe demandeur) dans sa spec RST et son issue, pour la traçabilité inter-projets.
+
+## Workflow
+
+- Le processus de dev (rôles, machine à états, handoff, prompts) est décrit dans
+  **`docs/workflow/`**. L'IA endosse un rôle à la fois, de façon séquentielle, et reprend
+  via la **note de handoff** + le GitHub Project.
+- **Format des fichiers** : les instructions opérationnelles (`AGENTS.md`, `CLAUDE.md`,
+  `docs/workflow/`) sont en **Markdown** ; la **documentation du projet**
+  (specifications, API, guides) est en **reStructuredText**.
+- Le cahier des charges brut se dépose dans `docs/specifications/cahier-des-charges/` ;
+  le rôle PO en dérive `docs/specifications/us/` (RST).
 
 ## Definition of Done (une tâche n'est close que si)
 

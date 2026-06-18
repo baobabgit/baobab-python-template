@@ -5,6 +5,11 @@ Cette section est la **source de vérité stable** du besoin. Elle décrit les
 **User Stories (US)** et leurs **Features (FEAT)**. Le **backlog** (les tâches,
 volatile) vit, lui, dans GitHub Issues / Projects et n'est pas dupliqué ici.
 
+Le **cahier des charges brut** (entrée humaine) se dépose dans
+``cahier-des-charges/`` ; le rôle Product Owner en dérive les ``us/`` ci-dessous.
+Chaque US/FEAT porte un champ ``:origin:`` indiquant sa provenance (cahier des
+charges ou projet externe demandeur).
+
 Hiérarchie et identifiants
 --------------------------
 
