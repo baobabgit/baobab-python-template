@@ -1,0 +1,23 @@
+---
+description: Règles de développement du projet (source unique de vérité)
+globs:
+alwaysApply: true
+---
+
+# Règles de développement
+
+La **source unique de vérité** des règles de ce projet est le fichier [`AGENTS.md`](../../AGENTS.md)
+à la racine du dépôt. **Lis-le et applique-le intégralement.** Ne duplique pas son contenu.
+
+Rappels prioritaires (le détail complet est dans `AGENTS.md`) :
+
+- **Python ≥ 3.11, orienté objet.** 1 classe = 1 fichier (module nommé d'après la classe).
+- **PEP 8** + **PEP 20** ; en cas de conflit, **PEP 8 prime**.
+- **Type hints obligatoires** ; `ruff` (lint+format) ; `mypy` strict.
+- **Docstrings en reStructuredText**, avec `:spec: <ID>`.
+- **Tests `pytest` en arborescence miroir** ; 1 classe testée = 1 classe de test ;
+  classe abstraite testée via une classe concrète de test ; **couverture ≥ 90 %**.
+- Doc **Sphinx/RST** ; dossier `docs/guides/` obligatoire.
+- Environnement virtuel **`.venv`** (`python -m venv .venv`), non versionné.
+- Aucun secret en clair (`.env` gitignoré + `.env.example`).
+- **Conventional Commits** + chaîne d'ID **US-001 / FEAT-001.1 / TASK-001.1.1**.

@@ -1,0 +1,106 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "example-package"
+version = "0.1.0"
+description = "Template de projet Python piloté par plusieurs IA de développement."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Michel ANDRIANAIVO" }]
+keywords = ["template", "python", "ai", "agents"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+dependencies = [
+    "pydantic-settings>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pre-commit>=3.8",
+]
+docs = [
+    "sphinx>=7.0",
+    "furo>=2024.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/your-repo"
+Repository = "https://github.com/your-org/your-repo"
+Documentation = "https://your-repo.readthedocs.io"
+Issues = "https://github.com/your-org/your-repo/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/example_package"]
+
+# --- Ruff : lint + format (outil unique) -------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle (PEP 8)
+    "F",        # pyflakes
+    "I",        # isort
+    "N",        # pep8-naming
+    "UP",       # pyupgrade
+    "B",        # bugbear
+    "D",        # pydocstyle (docstrings)
+    "ANN",      # type annotations
+    "RUF",      # ruff
+]
+ignore = [
+    "D203", "D213",      # incompatibilités de style de docstring
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests : docstrings/annotations non imposées, et noms de tests porteurs d'ID spec
+# (ex. test_FEAT_001_1_...) autorisés à contenir des majuscules.
+"tests/**/*.py" = ["D", "ANN", "N802"]
+
+# --- Mypy : typage strict ----------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src", "tests"]
+warn_unused_configs = true
+show_error_codes = true
+
+# --- Pytest + couverture (≥ 90 % imposée) ------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "@(abc\\.)?abstractmethod",
+]
