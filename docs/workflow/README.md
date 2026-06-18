@@ -50,3 +50,5 @@ lire le statut de la tâche active (colonne du Project + dernière note de hando
 - [`handoff.md`](handoff.md) — format de la note de handoff (reprise sans perte).
 - [`prompts/init.md`](prompts/init.md) — prompt de **bootstrap** (une seule fois).
 - [`prompts/orchestration.md`](prompts/orchestration.md) — prompt **récurrent**.
+- [`SETUP.md`](SETUP.md) — configuration GitHub one-time (template, labels, Project,
+  branch protection, environnements, Trusted Publishing).

@@ -21,6 +21,7 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - SBOM CycloneDX (via `pip-audit`) attaché aux Releases.
 - Durcissement release : TestPyPI sur pré-releases (`vX.Y.Zrc1`), attestation de
   provenance (supply chain), upload SARIF tolérant (repo privé sans GHAS).
+- `docs/workflow/SETUP.md` : checklist de configuration GitHub one-time (commandes `gh`).
 
 ## [0.1.0] - 2026-06-18
 
