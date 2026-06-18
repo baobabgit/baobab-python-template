@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Non publié]
 
+### Modifié
+- Retours du premier dogfood : `init.md` pointe vers `SETUP.md`, étape d'adaptation des
+  métadonnées au CDC, réécriture de l'intro README à l'étape PO, décision explicite sur les
+  placeholders, et badge Read the Docs neutralisé par défaut.
+
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).
 - Workflow multi-IA : `docs/workflow/` (rôles, gates, handoff, prompts init/orchestration).
