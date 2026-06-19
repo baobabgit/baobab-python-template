@@ -11,6 +11,9 @@ la *Ready* de la suivante → reprise déterministe.
 - **U2 — CI verte** : dès qu'il y a du code, on ne sort pas sur du rouge
   (`ruff` + `mypy` + `pytest ≥ 90 %`).
 
+**Dates de roadmap** : à l'entrée en *In progress*, renseigner le champ **Début** de la
+carte ; à *Done*, renseigner **Fin**. (Champs Date du Project, alimentent la vue Roadmap.)
+
 ## Tableau des gates
 
 | Phase (rôle) | Definition of Ready — *entrer* | Definition of Done — *sortir* (+ U1, U2) |

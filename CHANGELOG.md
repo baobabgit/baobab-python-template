@@ -16,6 +16,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - `scripts/setup_github.sh` : configuration GitHub idempotente (labels, ruleset de
   protection, environnements), tolérante au plan, câblée dans le bootstrap. `SETUP.md` §4
   corrigé (pas d'approbation de PR en mode solo ; protection indisponible en privé/Free).
+- Roadmap : champs Date `Début`/`Fin` du Project (gratuits), renseignés aux transitions
+  (In progress → Début, Done → Fin) ; documenté dans `gates.md` et le bootstrap.
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).
