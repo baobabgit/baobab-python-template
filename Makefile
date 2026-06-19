@@ -40,4 +40,4 @@ docs: ## Construit la documentation Sphinx (HTML)
 check: lint type test ## Vérifie tout (lint + types + tests)
 
 clean: ## Nettoie les caches et artefacts
-	rm -rf .pytest_cache .mypy_cache .ruff_cache htmlcov coverage.xml .coverage docs/_build
+	rm -rf .pytest_cache .mypy_cache .ruff_cache htmlcov coverage.xml .coverage docs/_build docs/api/_autosummary
