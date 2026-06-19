@@ -27,8 +27,10 @@ avant d'agir. Déroule la phase 0, puis bascule en mode orchestration normal.
      `docs/specifications/us/`, renseigne `:origin:` ;
    - **réécris l'intro du `README.md`** (titre, blurb, À propos, Fonctionnalités, Stack)
      pour décrire le projet réel et non le template ;
+   - lance `bash scripts/setup_github.sh` (labels, protection de branche, environnements —
+     **tolérant** si le plan/visibilité ne le permet pas : voir `SETUP.md`) ;
    - crée le GitHub Project (colonnes `Spec → Design → In progress → In review →
-     Security → Done`), les labels, milestones, puis les issues `US` + sub-issues `FEAT`.
+     Security → Done`), les milestones, puis les issues `US` + sub-issues `FEAT`.
 6. **Vérifier** : `make check` vert ; `sphinx-build` (idéalement `-W`) passe.
 7. **Commit** : `chore: bootstrap project from template`.
 8. **Première note de handoff** sur l'issue de la 1ʳᵉ tâche (`role_done: PO`,

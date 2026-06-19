@@ -44,21 +44,39 @@ Puis, dans l'UI du Project (ou via `gh project field-create`) :
 
 ## 4. Branch protection (applique le gate « U2 : CI verte »)
 
-Rend les jobs CI **requis** avant tout merge sur `main` :
+> ⚠️ **Modèle solo / mono-IA** : n'exige **pas** d'approbation de PR — une IA ne peut pas
+> approuver sa propre PR, cela bloquerait tout merge. On exige uniquement la **CI verte** ;
+> le rôle Relecteur est porté par le workflow, pas par GitHub.
+>
+> ⚠️ **Plan** : branch protection et rulesets sont **indisponibles sur repo privé en plan
+> Free** (HTTP 403). → rendre le repo **public** ou passer **Pro/Team**.
+
+Le plus simple : exécuter [`scripts/setup_github.sh`](../../scripts/setup_github.sh)
+(labels + ruleset + environnements, idempotent, tolérant au plan). Sinon, manuellement
+via un **ruleset** exigeant la CI verte :
 
 ```bash
-gh api -X PUT repos/OWNER/REPO/branches/main/protection \
-  -H "Accept: application/vnd.github+json" \
-  -F "required_status_checks[strict]=true" \
-  -F "required_status_checks[contexts][]=lint" \
-  -F "required_status_checks[contexts][]=type" \
-  -F "required_status_checks[contexts][]=security" \
-  -F "required_status_checks[contexts][]=test (3.11)" \
-  -F "required_status_checks[contexts][]=test (3.12)" \
-  -F "required_status_checks[contexts][]=test (3.13)" \
-  -F "enforce_admins=true" \
-  -F "required_pull_request_reviews[required_approving_review_count]=1" \
-  -F "restrictions=" 
+gh api --method POST repos/OWNER/REPO/rulesets --input - <<'JSON'
+{
+  "name": "main-protection",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "rules": [
+    { "type": "deletion" },
+    { "type": "non_fast_forward" },
+    { "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "required_status_checks": [
+          {"context": "lint"}, {"context": "type"}, {"context": "security"},
+          {"context": "test (3.11)"}, {"context": "test (3.12)"}, {"context": "test (3.13)"}
+        ]
+      }
+    }
+  ]
+}
+JSON
 ```
 
 ## 5. Environnements de publication

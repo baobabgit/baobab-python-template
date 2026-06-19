@@ -13,6 +13,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
   placeholders, et badge Read the Docs neutralisé par défaut.
 - Règle « 1 classe = 1 fichier » : dérogation documentée pour les hiérarchies d'exceptions
   (sous-package `exceptions/` par catégorie).
+- `scripts/setup_github.sh` : configuration GitHub idempotente (labels, ruleset de
+  protection, environnements), tolérante au plan, câblée dans le bootstrap. `SETUP.md` §4
+  corrigé (pas d'approbation de PR en mode solo ; protection indisponible en privé/Free).
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).
