@@ -18,6 +18,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
   corrigé (pas d'approbation de PR en mode solo ; protection indisponible en privé/Free).
 - Roadmap : champs Date `Début`/`Fin` du Project (gratuits), renseignés aux transitions
   (In progress → Début, Done → Fin) ; documenté dans `gates.md` et le bootstrap.
+- Ruff : règle `D401` (imperative mood, heuristique anglaise) désactivée — inadaptée aux
+  docstrings françaises.
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).

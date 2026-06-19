@@ -72,6 +72,7 @@ select = [
 ]
 ignore = [
     "D203", "D213",      # incompatibilités de style de docstring
+    "D401",              # "imperative mood" : heuristique anglaise, inadaptée au français
 ]
 
 [tool.ruff.lint.pydocstyle]
