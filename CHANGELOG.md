@@ -20,6 +20,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
   (In progress → Début, Done → Fin) ; documenté dans `gates.md` et le bootstrap.
 - Ruff : règle `D401` (imperative mood, heuristique anglaise) désactivée — inadaptée aux
   docstrings françaises.
+- Stratégie de branches documentée : trunk-based en v1, modèle imbriqué
+  `TASK→FEAT→US→main` réservé à la v2 concurrence.
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).

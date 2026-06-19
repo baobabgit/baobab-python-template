@@ -43,6 +43,18 @@ lire le statut de la tâche active (colonne du Project + dernière note de hando
    → s'arrêter
 ```
 
+## Stratégie de branches
+
+- **v1 (séquentiel, défaut)** : **trunk-based**. Branches courtes `feat/<ID>-slug` →
+  PR → `main`. La hiérarchie US/FEAT/TASK vit dans le **tracker** (sub-issues, labels,
+  milestones), pas dans des branches longues. `main` reste toujours vert et livrable.
+- **v2 (concurrence)** : modèle **imbriqué** `TASK → FEAT → US → main` (branches
+  d'intégration par US/FEAT) pour isoler des agents travaillant en parallèle. Réservé à
+  la v2, où l'isolation paie réellement.
+- **Protection** : ruleset sur `main` exigeant la **CI verte** (lint, type, security,
+  test) ; **pas d'approbation de PR** (modèle solo : une IA ne peut pas s'auto-approuver).
+  Disponible gratuitement sur repo **public** ou plan Pro/Team (cf. `SETUP.md`).
+
 ## Contenu
 
 - [`roles/`](roles/) — un persona par rôle (mission, gates, actions).
