@@ -11,6 +11,10 @@ la *Ready* de la suivante → reprise déterministe.
 - **U2 — CI verte** : dès qu'il y a du code, on ne sort pas sur du rouge
   (`ruff` + `mypy` + `pytest ≥ 90 %`).
 
+- **U3 — Close au merge** : une issue/carte n'est passée *Done* / fermée qu'**après** le
+  merge de sa PR sur `main` — **jamais avant**. (Évite les issues « closes mais non
+  livrées » : du code resté sur une branche alors que le tracker dit « terminé ».)
+
 **Dates de roadmap** : à l'entrée en *In progress*, renseigner le champ **Début** de la
 carte ; à *Done*, renseigner **Fin**. (Champs Date du Project, alimentent la vue Roadmap.)
 

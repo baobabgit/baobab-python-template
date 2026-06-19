@@ -22,6 +22,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
   docstrings françaises.
 - Stratégie de branches documentée : trunk-based en v1, modèle imbriqué
   `TASK→FEAT→US→main` réservé à la v2 concurrence.
+- Règle « fermeture au merge » (U3) : une issue ne se ferme qu'après le merge de sa PR
+  sur `main` — évite les issues « closes mais non livrées » (incident dogfood).
 
 ### Ajouté
 - Structure initiale du template (règles multi-IA, docs Sphinx, CI, exemples).

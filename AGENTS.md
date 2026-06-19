@@ -86,6 +86,8 @@
   (titres d'issues, branches, commits `Closes #<n>`, noms de tests, docstrings `:spec:`).
 - **Provenance** : chaque US/FEAT porte un champ `:origin:` (cahier des charges, ou projet
   externe demandeur) dans sa spec RST et son issue, pour la traçabilité inter-projets.
+- **Fermeture au merge** : une issue ne se ferme qu'**après** le merge de sa PR sur `main`,
+  jamais avant (sinon le tracker dit « terminé » alors que le code dort sur une branche).
 
 ## Workflow
 
