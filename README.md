@@ -162,12 +162,3 @@ Le workflow `integration.yml` valide automatiquement les intégrations déclaré
 
 Distribué sous licence **MIT**. Voir [`LICENSE`](LICENSE).
 
-## Remerciements
-
-Outils et standards qui rendent ce template possible : Python, Ruff, mypy,
-pytest, Sphinx, pre-commit, GitHub Actions, et les documentations de Claude Code,
-Cursor et OpenAI Codex.
-
-## Auteur
-
-**Michel ANDRIANAIVO** — [patrick.andri@gmail.com](mailto:patrick.andri@gmail.com)
