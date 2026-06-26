@@ -16,7 +16,7 @@ jobs:
     name: Valider le tag et la CI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Vérifier le format du tag (vX.Y.Z strict)
@@ -26,7 +26,7 @@ jobs:
             exit 1
           fi
           echo "Tag valide : $GITHUB_REF_NAME"
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v8.0.0
       - run: uv python install 3.13
       - run: uv sync --frozen
       - name: Vérifier la cohérence version tag ↔ pyproject.toml
@@ -56,10 +56,10 @@ jobs:
       attestations: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v8.0.0
       - run: uv python install 3.13
       - run: uv sync --frozen
       - name: Build sdist + wheel
@@ -70,7 +70,7 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: "dist/*"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: dist
           path: dist/
@@ -83,7 +83,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist/
@@ -97,8 +97,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist/
