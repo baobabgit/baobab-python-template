@@ -11,13 +11,20 @@ La **source unique de vérité** des règles de ce projet est le fichier [`AGENT
 
 Rappels prioritaires (le détail complet est dans `AGENTS.md`) :
 
-- **Python ≥ 3.11, orienté objet.** 1 classe = 1 fichier (module nommé d'après la classe).
+- **Python ≥ 3.13, orienté objet.** 1 classe = 1 fichier (module nommé d'après la classe).
 - **PEP 8** + **PEP 20** ; en cas de conflit, **PEP 8 prime**.
-- **Type hints obligatoires** ; `ruff` (lint+format) ; `mypy` strict.
+- **Type hints obligatoires** ; `black` (format) + `ruff` (lint) ; `mypy` strict.
 - **Docstrings en reStructuredText**, avec `:spec: <ID>`.
-- **Tests `pytest` en arborescence miroir** ; 1 classe testée = 1 classe de test ;
-  classe abstraite testée via une classe concrète de test ; **couverture ≥ 90 %**.
+- **Tests `pytest` en arborescence miroir** (`tests/unit/<pkg>/`) ; 1 classe testée = 1 classe
+  de test ; classe abstraite testée via une classe concrète de test ; **couverture ≥ 95 %**.
 - Doc **Sphinx/RST** ; dossier `docs/guides/` obligatoire.
-- Environnement virtuel **`.venv`** (`python -m venv .venv`), non versionné.
+- Gestion des dépendances via **`uv`** ; lockfile **`uv.lock`** versionné.
 - Aucun secret en clair (`.env` gitignoré + `.env.example`).
-- **Conventional Commits** + chaîne d'ID **US-001 / FEAT-001.1 / TASK-001.1.1**.
+- **Modèle Git 3 niveaux** : `main` → `version/vX.Y.Z` → `bl/XXX-description`.
+  Une seule branche `bl/` active à la fois.
+- **Messages de commit** : `BL-XXX: action courte`. Jamais de mention d'outil.
+  Le hook `no-ai-attribution` rejette tout commit avec attribution interdite.
+- **Verrou** `docs/ai_workflow/state/lock.yaml` : ne pas modifier le projet si le
+  verrou est actif et non expiré.
+- **Aucun outil ne doit apparaître comme contributeur, auteur, co-auteur ou mainteneur**
+  dans le moindre fichier versionné.

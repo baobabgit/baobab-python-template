@@ -7,7 +7,63 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Non publié]
 
-### Modifié
+### Modifié (évolution du template — nouveau cahier des charges)
+
+- **Gestionnaire de dépendances** : migration de `pip`/`venv` vers `uv` ; `uv.lock`
+  versionné pour des builds reproductibles ; `.python-version` figée à `3.13`.
+- **Python minimum** : `>=3.11` → `>=3.13` ; CI et mypy mis à jour en conséquence.
+- **Couverture minimale** : `90 %` → `95 %` dans `pyproject.toml`, `Makefile`, CI et
+  hook `pre-commit`.
+- **Formatage + lint séparés** : `ruff format` remplacé par `black` (format) ; `ruff`
+  conservé pour le lint uniquement. Pre-commit mis à jour (hook `black` ajouté, hook
+  `ruff-format` supprimé).
+- **Trois workflows CI** : `ci.yml` restructuré (jobs `quality`, `typing`, `security`,
+  `tests`, `commit-policy`, `build` via `uv`) ; `integration.yml` créé (déclenché sur
+  les PR vers `version/**`, conditionnel selon `integration_required`) ; `release.yml`
+  simplifié (ne réexécute pas la CI, vérifie tag + CHANGELOG, publie via Trusted
+  Publishing OIDC).
+- **Modèle Git à 3 niveaux** : `main → version/vX.Y.Z → bl/XXX` (suppression des
+  branches `us/` et `feat/` qui étaient des branches Git — désormais regroupements
+  logiques dans les `status.yaml`).
+- **Versionnage statique** : `hatch-vcs` supprimé ; version `0.1.0` déclarée
+  statiquement dans `pyproject.toml`.
+- **SemVer sans borne supérieure** : le template accompagne une librairie de `v0.1.0`
+  vers `v1.0.0` et au-delà.
+- **AGENTS.md** refonte complète : ajout des sections uv, tests `tests/unit/`,
+  modèle Git 3 niveaux, verrou, recovery, versions, intégrations, SemVer.
+- **CLAUDE.md** : références mises à jour (`tests/unit/`, `make all`, verrou, règle
+  anti-attribution).
+- `.cursor/rules/000-core.mdc` : aligné sur les nouvelles règles.
+- `Makefile` : cibles `quality`, `test`, `build`, `all` via `uv run`.
+- `noxfile.py` : sessions `quality`, `tests`, `build`, `all` créées.
+
+### Ajouté
+
+- `scripts/check_no_ai_attribution.py` : hook `commit-msg` et outil CI rejetant toute
+  attribution interdite dans les messages de commit.
+- `.codex/rules/default.rules` : règles Codex (`uv run *` autorisé, `rm -rf` interdit,
+  `git push`/`git tag` à confirmer).
+- `.python-version` : fixe Python 3.13 pour uv et les outils.
+- `uv.lock` : lockfile reproductible.
+- `noxfile.py` : sessions qualité/tests/build.
+- `docs/ai_workflow/` : structure complète (workflow.md, state/lock.yaml,
+  state/queue.yaml, state/dependency_graph.yaml, runs/, roles/, versions/, priorities/).
+- `docs/backlog/` : structure (user_stories/, features/, backlogs/).
+- `docs/contracts/` : contrats publics (public_api.md, imports.md, exceptions.md,
+  models.md, services.md, compatibility.md).
+- `docs/integrations/` : compatibility_matrix.yaml + reports/.
+- `docs/architecture/adr/` : dossier pour les Architecture Decision Records.
+- `tests/unit/` : les tests exemple déplacés depuis `tests/example_package/`.
+- `tests/integration/`, `tests/contracts/`, `tests/fixtures/` : nouveaux dossiers.
+- `.github/workflows/integration.yml` : workflow d'intégration inter-librairies.
+- Badges README : `integration` et `release` ajoutés ; badges simplifiés à 3 workflows.
+
+### Supprimé
+
+- `pip-audit` : retiré des dépendances de dev (non mentionné dans le nouveau CDC).
+- Version dérivée du tag git (`hatch-vcs`) : remplacée par versionnage statique.
+
+### Modifié (suite changelog existant)
 - Retours du premier dogfood : `init.md` pointe vers `SETUP.md`, étape d'adaptation des
   métadonnées au CDC, réécriture de l'intro README à l'étape PO, décision explicite sur les
   placeholders, et badge Read the Docs neutralisé par défaut.

@@ -1,7 +1,8 @@
 # Example Package
 
 [![CI](https://github.com/your-org/your-repo/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/your-org/your-repo/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/your-repo)
+[![Integration](https://github.com/your-org/your-repo/actions/workflows/integration.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/integration.yml)
+[![Release](https://github.com/your-org/your-repo/actions/workflows/release.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/release.yml)
 [![PyPI version](https://img.shields.io/pypi/v/example-package.svg)](https://pypi.org/project/example-package/)
 [![Python versions](https://img.shields.io/pypi/pyversions/example-package.svg)](https://pypi.org/project/example-package/)
 <!-- Badge Read the Docs : à réactiver une fois l'hébergement de doc configuré.
@@ -11,10 +12,9 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
-> Template de projet Python orienté objet, pensé pour être développé par **plusieurs IA**
-> (Claude Code, Cursor, OpenAI Codex) qui partagent un **jeu de règles unique**.
+> Template de projet Python orienté objet, pensé pour être développé par **plusieurs outils**
+> (Claude Code, Cursor, Codex) qui partagent un **jeu de règles unique** via `AGENTS.md`.
 
 > ℹ️ Remplacez `your-org/your-repo`, `example-package` et le package `example_package`
 > par les valeurs de votre projet (badges, `pyproject.toml`, dossiers `src/` et `tests/`).
@@ -57,11 +57,13 @@ chaque prompt**.
 
 | Domaine        | Outil                                  |
 | -------------- | -------------------------------------- |
-| Langage        | Python ≥ 3.11                          |
-| Environnement  | `venv` (`.venv`) + `pip`               |
-| Lint & format  | `ruff`                                 |
+| Langage        | Python ≥ 3.13                          |
+| Environnement  | `uv` + lockfile `uv.lock`              |
+| Format         | `black`                                |
+| Lint           | `ruff`                                 |
 | Typage         | `mypy` (strict)                        |
-| Tests          | `pytest` + `pytest-cov`                |
+| Sécurité       | `bandit`                               |
+| Tests          | `pytest` + `pytest-cov` (≥ 95 %)      |
 | Documentation  | `sphinx` (+ `furo`), reStructuredText  |
 | Config         | `pydantic-settings`                    |
 | CI / Hooks     | GitHub Actions, `pre-commit`           |
@@ -104,17 +106,14 @@ Besoin (docs/specifications, RST)
 git clone https://github.com/your-org/your-repo.git
 cd your-repo
 
-# 2. Environnement virtuel (toujours .venv)
-python -m venv .venv
-# Windows : .venv\Scripts\Activate.ps1   |   Linux/macOS : source .venv/bin/activate
+# 2. Installer l'environnement + les hooks (via uv)
+make install
 
-# 3. Installer + hooks
-pip install -e ".[dev,docs]"
-pre-commit install
-
-# 4. Vérifier
-ruff check . && mypy && pytest      # ou : make check
+# 3. Vérifier (qualité + tests ≥ 95 % + build)
+make all
 ```
+
+Prérequis : [uv](https://docs.astral.sh/uv/) installé (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
 
 ## Configuration
 
@@ -142,14 +141,23 @@ cp .env.example .env
 ## Contribuer
 
 Les règles de développement sont décrites dans [`AGENTS.md`](AGENTS.md) et le
-processus dans [`CONTRIBUTING.md`](CONTRIBUTING.md). En résumé : branche dédiée,
-**Conventional Commits** avec ID spec, PR verte (lint + types + tests ≥ 90 %).
+processus dans [`docs/ai_workflow/workflow.md`](docs/ai_workflow/workflow.md).
+En résumé : branche `bl/XXX-description` depuis `version/vX.Y.Z`,
+commit `BL-XXX: action`, PR verte (qualité + tests ≥ 95 % + build).
+
+## Intégration inter-librairies
+
+Les contrats publics sont dans [`docs/contracts/`](docs/contracts/).
+La matrice de compatibilité est dans
+[`docs/integrations/compatibility_matrix.yaml`](docs/integrations/compatibility_matrix.yaml).
+Le workflow `integration.yml` valide automatiquement les intégrations déclarées.
 
 ## Et après ?
 
 - [ ] Brancher le dépôt sur GitHub Projects (US / FEAT / Task + sprints).
 - [ ] Publier la documentation (Read the Docs).
-- [ ] Ajouter la publication PyPI au workflow.
+- [ ] Configurer les environments GitHub (`pypi`) pour le Trusted Publishing.
+- [ ] Renseigner la matrice de compatibilité si la librairie dépend d'autres packages.
 
 ## Licence
 

@@ -1,43 +1,30 @@
-# Commandes standard du projet.
-# Sous Windows, exécutez ces commandes via Git Bash, ou lancez-les manuellement.
+# Commandes standard du projet — toutes les exécutions passent par uv.
 .DEFAULT_GOAL := help
-PY ?= python
 
-.PHONY: help venv install lint format type test cov security docs check clean
+.PHONY: help install quality test build all clean
 
 help: ## Affiche cette aide
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
-venv: ## Crée l'environnement virtuel .venv
-	$(PY) -m venv .venv
+install: ## Installe l'environnement de dev + hooks pre-commit
+	uv sync
+	uv run pre-commit install --hook-type commit-msg
+	uv run pre-commit install
 
-install: ## Installe le projet + outils de dev et docs
-	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -e ".[dev,docs]"
-	pre-commit install
+quality: ## Formatage (black), lint (ruff), typage (mypy), sécurité (bandit)
+	uv run black --check src tests
+	uv run ruff check src tests
+	uv run mypy src
+	uv run bandit -r src -c pyproject.toml
 
-lint: ## Lint (ruff)
-	ruff check .
+test: ## Tests + couverture ≥ 95 %
+	uv run pytest --cov=src --cov-report=term-missing --cov-fail-under=95
 
-format: ## Formate le code (ruff)
-	ruff format .
+build: ## Construit le package et vérifie la distribution
+	uv build
+	uv run twine check dist/*
 
-type: ## Vérification de types (mypy strict)
-	mypy
-
-test: ## Tests + couverture >= 90%
-	pytest
-
-cov: test ## Alias de test (couverture incluse)
-
-security: ## Analyse de sécurité (bandit + pip-audit)
-	bandit -c pyproject.toml -r src
-	pip-audit
-
-docs: ## Construit la documentation Sphinx (HTML)
-	sphinx-build -b html docs docs/_build/html
-
-check: lint type test ## Vérifie tout (lint + types + tests)
+all: quality test build ## Exécute quality + test + build (validation complète)
 
 clean: ## Nettoie les caches et artefacts
-	rm -rf .pytest_cache .mypy_cache .ruff_cache htmlcov coverage.xml .coverage docs/_build docs/api/_autosummary
+	rm -rf .pytest_cache .mypy_cache .ruff_cache htmlcov coverage.xml .coverage dist/ docs/_build docs/api/_autosummary
