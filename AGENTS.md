@@ -4,9 +4,11 @@
 > (Codex le lit nativement ; `CLAUDE.md` l'importe ; `.cursor/rules/000-core.mdc` le reflète).
 > Toute modification de règle se fait **ici**, jamais en double.
 
+---
+
 ## Langage & conception
 
-- Langage : **Python ≥ 3.11**, **orienté objet**. Respect de **SOLID**, composition > héritage.
+- Langage : **Python ≥ 3.13**, **orienté objet**. Respect de **SOLID**, composition > héritage.
 - **1 classe = 1 fichier.** Le module porte le nom de la classe en `snake_case`
   (`class FactureClient` → `facture_client.py`).
   - *Dérogation* : une **hiérarchie d'exceptions** (classes courtes) peut être regroupée
@@ -30,47 +32,94 @@
 ## Typage & style
 
 - **Type hints obligatoires** sur toutes les signatures (paramètres et retours).
-- Lint + format : **`ruff`** (unique outil). Vérification de types : **`mypy`** (mode strict).
+- Format : **`black`** (line-length 88). Lint : **`ruff`** (lint uniquement, pas format).
+  Vérification de types : **`mypy`** (mode strict).
 - **Docstrings en reStructuredText (RST)** sur tout élément public
   (champs `:param:`, `:returns:`, `:raises:`, et `:spec: <ID>` pour la traçabilité).
 
 ## Tests
 
 - Framework : **`pytest`**, structure **AAA** (Arrange / Act / Assert), tests déterministes.
-- **Arborescence miroir** : `src/<pkg>/a/b/c.py` ⇒ `tests/<pkg>/a/b/test_c.py`.
+- **Arborescence miroir** : `src/<pkg>/a/b/c.py` ⇒ `tests/unit/<pkg>/a/b/test_c.py`.
 - **Une classe testée = une classe de test** (`class FactureClient` ⇒ `class TestFactureClient`).
-- **Classe abstraite** : on la teste via une **classe concrète de test** définie dans le fichier de test.
+- **Classe abstraite** : testée via une **classe concrète de test** définie dans le fichier de test.
 - Nom de test porteur de l'ID spec : `def test_FEAT_001_1_cas_nominal(...)`.
-- **Couverture ≥ 90 %**, imposée par `--cov-fail-under=90` (voir `pyproject.toml`).
+- **Couverture ≥ 95 %**, imposée par `--cov-fail-under=95` (voir `pyproject.toml`).
+- Les tests d'intégration vont dans `tests/integration/`, les tests de contrat dans
+  `tests/contracts/`, les fixtures partagées dans `tests/fixtures/`.
 
 ## Documentation
 
 - **Sphinx** + **RST**. La doc API est générée par **`autodoc`** depuis les docstrings.
 - Dossier **`docs/guides/` obligatoire**, organisé selon **Diátaxis** :
   `tutorials/` (apprendre) et `how-to/` (résoudre un problème précis).
-- **`README.md`** : suit la structure « 15 sections » (voir le fichier) et porte **tous les badges**
-  que le projet peut légitimement afficher (version, couverture, CI, licence, style, types, docs…).
+- **`README.md`** : porte **tous les badges** CI (ci, integration, release) et les sections
+  minimales : installation, usage, qualité, tests, release, intégration, licence.
 
 ## Arborescence (layout `src/`)
 
 ```
 .
 ├── src/<package>/        # code (1 classe par fichier)
-├── tests/<package>/      # tests en miroir de src/
+├── tests/
+│   ├── unit/<package>/   # tests unitaires en miroir de src/
+│   ├── integration/      # tests d'intégration inter-librairies
+│   ├── contracts/        # tests de contrat des API publiques
+│   └── fixtures/         # fixtures partagées
 ├── docs/
 │   ├── specifications/   # cahier des charges : US / FEAT (RST, stable)
+│   ├── ai_workflow/      # workflow IA : state/, runs/, versions/, roles/
+│   ├── backlog/          # user_stories/, features/, backlogs/
+│   ├── contracts/        # contrats publics de la librairie
+│   ├── integrations/     # matrices de compatibilité + rapports
+│   ├── architecture/adr/ # Architecture Decision Records
 │   ├── api/              # doc API (autodoc)
 │   └── guides/           # tutorials/ + how-to/  (OBLIGATOIRE)
-├── pyproject.toml        # config unique (projet, ruff, mypy, pytest, coverage)
+├── pyproject.toml        # config unique (projet, black, ruff, mypy, pytest, coverage)
+├── uv.lock               # lockfile reproductible (versionné)
+├── .python-version       # version Python figée (3.13)
 ├── .pre-commit-config.yaml
-└── .github/              # CI + templates d'issues (US/FEAT/Task) + PR
+├── noxfile.py
+└── .github/              # CI (ci.yml, integration.yml, release.yml) + PR template
 ```
 
-## Environnement & dépendances
+## Gestion des dépendances avec `uv`
 
-- **Toujours un environnement virtuel** : `python -m venv .venv` dans le dossier **`.venv`**.
-- `.venv/` n'est **jamais** versionné (cf. `.gitignore`).
-- Config projet et dépendances dans **`pyproject.toml`** (PEP 621). Install dev : `pip install -e ".[dev,docs]"`.
+- **`uv`** est le gestionnaire d'environnement et de dépendances.
+- Les dépendances sont déclarées dans `pyproject.toml` sous `[dependency-groups]`.
+- Le fichier **`uv.lock`** est **versionné** (builds reproductibles).
+- L'interpréteur est figé par **`.python-version`** (`3.13`).
+- Commandes courantes :
+  - `uv sync` — installe l'environnement depuis uv.lock
+  - `uv sync --frozen` — en CI (échoue si le lock n'est pas à jour)
+  - `uv add <paquet>` — ajoute une dépendance et met à jour le lock
+  - `uv run <commande>` — exécute dans l'environnement uv
+  - `uv build` — construit le package
+
+## Standards qualité obligatoires
+
+Commandes (toutes via `uv run`) :
+
+```bash
+# Qualité
+uv run black --check src tests
+uv run ruff check src tests
+uv run mypy src
+uv run bandit -r src -c pyproject.toml
+
+# Tests
+uv run pytest --cov=src --cov-report=term-missing --cov-fail-under=95
+
+# Build
+uv build
+uv run twine check dist/*
+```
+
+Cible unique : `make all` (ou `uv run nox -s all`).
+
+Sont bloquants : erreur black, erreur ruff, erreur mypy, warning non corrigé,
+couverture < 95 %, alerte bandit non triée, build invalide, distribution invalide,
+badge CI en échec, intégration inter-librairie en échec.
 
 ## Sécurité
 
@@ -79,31 +128,124 @@
 
 ## Git & traçabilité
 
-- **Conventional Commits** portant l'ID spec : `feat(FEAT-001.1): export PDF de la facture`.
-- **SemVer** pour les versions.
-- Chaîne d'identifiants propagée partout :
-  **US-001** → **FEAT-001.1** → **TASK-001.1.1**
-  (titres d'issues, branches, commits `Closes #<n>`, noms de tests, docstrings `:spec:`).
-- **Provenance** : chaque US/FEAT porte un champ `:origin:` (cahier des charges, ou projet
-  externe demandeur) dans sa spec RST et son issue, pour la traçabilité inter-projets.
-- **Fermeture au merge** : une issue ne se ferme qu'**après** le merge de sa PR sur `main`,
-  jamais avant (sinon le tracker dit « terminé » alors que le code dort sur une branche).
+### Modèle de branches (3 niveaux)
+
+```
+main
+└── version/vX.Y.Z
+    └── bl/XXX-description
+```
+
+- `main` — code stable uniquement, porte les tags de release.
+- `version/vX.Y.Z` — tout le travail d'une version ; créée depuis `main`.
+- `bl/XXX-description` — implémentation atomique d'un backlog ; créée depuis
+  `version/vX.Y.Z`, mergée vers `version/vX.Y.Z` par PR après CI verte.
+- Les User Stories (`US-XXX`) et Features (`FEAT-XXX`) sont des **regroupements logiques**
+  portés dans les backlogs et les `status.yaml` ; **ce ne sont pas des branches Git**.
+- Une seule branche `bl/` peut être active (non mergée) à la fois.
+- Merges toujours ascendants : `bl/` → `version/` → `main`.
+- Aucun commit direct sur `main`. Aucun tag si la version n'est pas `RELEASE_READY`.
+
+### Messages de commit
+
+Format obligatoire : `BL-XXX: action courte et explicite`
+
+Exemples corrects :
+```
+BL-012: implement user repository
+BL-013: add user repository unit tests
+BL-014: document public user service
+```
+
+**Interdictions absolues** (contrôlées par le hook `no-ai-attribution`) :
+- mentionner un outil (Cursor, Claude, Codex…)
+- mentionner une génération automatique
+- ajouter un trailer `Co-authored-by:`
+- ajouter une signature d'assistant
+
+### Conventional Commits & chaîne d'ID
+
+Format alternatif pour les commits hors BL (refacto, CI, docs) :
+`feat(FEAT-001.1): export PDF de la facture`
+
+Chaîne propagée partout : **US-001** → **FEAT-001.1** → **TASK-001.1.1**
+(titres d'issues, branches bl/, commits, noms de tests, docstrings `:spec:`).
+
+**SemVer** pour les versions, sans borne supérieure :
+- `MAJOR` : rupture de l'API publique ;
+- `MINOR` : ajout rétrocompatible ;
+- `PATCH` : correction rétrocompatible.
+
+**Fermeture au merge** : une issue ne se ferme qu'après le merge de sa PR sur `main`.
+
+## Interdiction de mention contributive des outils
+
+**Aucun outil de développement assisté ne doit être mentionné comme contributeur,
+auteur, co-auteur, mainteneur ou générateur du projet.**
+
+Cette règle s'applique partout :
+- `README.md`, `CHANGELOG.md`, documentation projet
+- messages de commit, descriptions de PR, notes de release
+- métadonnées `pyproject.toml`, fichiers `AUTHORS` ou `CONTRIBUTORS`
+- commentaires de code, docstrings, rapports de revue ou de release
+- logs de workflow conservés dans le dépôt
+
+Un hook `pre-commit` de type `commit-msg` (`no-ai-attribution`) **rejette automatiquement**
+tout commit dont le message contient une formulation interdite.
+Ce contrôle est également rejoué en CI (job `commit-policy` dans `ci.yml`).
+
+## Gestion du verrou de travail
+
+Un seul outil peut travailler à un instant donné. Le verrou est géré via :
+
+```
+docs/ai_workflow/state/lock.yaml
+```
+
+Règles :
+- `locked: false` → un outil peut démarrer.
+- `locked: true` + `expires_at` dans le futur → aucun autre outil ne modifie le projet.
+- `locked: true` + `expires_at` dépassé → verrou orphelin → procédure de recovery.
+- Tout outil actif met à jour `last_heartbeat_at` et `expires_at` régulièrement.
+
+En cas de verrou orphelin, produire `docs/ai_workflow/runs/<BL-ID>/08_recovery.md`
+(voir `docs/ai_workflow/workflow.md` pour le détail de la procédure).
+
+## Gestion des versions
+
+Chaque version possède un dossier `docs/ai_workflow/versions/vX.Y.Z/` contenant :
+`version.yaml`, `scope.md`, `validation.md`, `integration_matrix.yaml`, `release_report.md`.
+
+Statuts : `PLANNED` → `IN_DEVELOPMENT` → `INTERNAL_VALIDATED` → `INTEGRATION_PENDING`
+→ `INTEGRATION_VALIDATED` → `RELEASE_READY` → `RELEASED`.
+
+Une version est `RELEASE_READY` uniquement si : tous les backlogs sont mergés, black +
+ruff + mypy + bandit passent, couverture ≥ 95 %, build valide, twine check valide,
+changelog à jour, badges README cohérents, intégrations obligatoires validées.
+
+## Gestion inter-librairies
+
+Les contrats publics sont dans `docs/contracts/`. La matrice de compatibilité est dans
+`docs/integrations/compatibility_matrix.yaml`. Les rapports d'intégration sont dans
+`docs/integrations/reports/`.
+
+Une version est `INTEGRATION_VALIDATED` si : validation interne réussie, dépendances
+compatibles, librairies consommatrices requises ont validé l'intégration, rapports
+d'intégration présents, matrices de compatibilité à jour.
 
 ## Workflow
 
-- Le processus de dev (rôles, machine à états, handoff, prompts) est décrit dans
-  **`docs/workflow/`**. L'IA endosse un rôle à la fois, de façon séquentielle, et reprend
-  via la **note de handoff** + le GitHub Project.
-- **Format des fichiers** : les instructions opérationnelles (`AGENTS.md`, `CLAUDE.md`,
-  `docs/workflow/`) sont en **Markdown** ; la **documentation du projet**
-  (specifications, API, guides) est en **reStructuredText**.
-- Le cahier des charges brut se dépose dans `docs/specifications/cahier-des-charges/` ;
-  le rôle PO en dérive `docs/specifications/us/` (RST).
+Le processus de dev (rôles, états, handoff, prompts) est décrit dans
+**`docs/ai_workflow/workflow.md`**. L'IA endosse un rôle à la fois, de façon
+séquentielle, et reprend via la note de handoff + le `status.yaml` du run courant.
+
+Format des fichiers : instructions opérationnelles en **Markdown** ; documentation
+du projet (specifications, API, guides) en **reStructuredText**.
 
 ## Definition of Done (une tâche n'est close que si)
 
 1. Code POO, 1 classe/fichier, type hints complets.
-2. `ruff` (lint+format) et `mypy` strict passent.
-3. Tests présents en miroir, couverture ≥ 90 %.
+2. `black`, `ruff` (lint) et `mypy` strict passent.
+3. Tests présents en miroir (`tests/unit/`), couverture ≥ 95 %.
 4. Docstrings RST + guide mis à jour si le comportement public change.
-5. Commit conforme (Conventional Commits + ID), PR fusionnée.
+5. Commit conforme (BL-XXX: + sans attribution IA), PR fusionnée sur `version/vX.Y.Z`.
