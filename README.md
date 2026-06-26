@@ -1,6 +1,5 @@
 # Example Package
 
-[![CI](https://github.com/your-org/your-repo/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/ci.yml)
 [![Integration](https://github.com/your-org/your-repo/actions/workflows/integration.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/integration.yml)
 [![Release](https://github.com/your-org/your-repo/actions/workflows/release.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/release.yml)
 [![PyPI version](https://img.shields.io/pypi/v/example-package.svg)](https://pypi.org/project/example-package/)
