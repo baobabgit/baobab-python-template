@@ -19,7 +19,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "pydantic-settings>=2.0",
+    "pydantic-settings>=2.14.2",
 ]
 
 [project.urls]
@@ -43,7 +43,7 @@ dev = [
     "build>=1.0",
     "twine>=6.0",
     "pre-commit>=4.0",
-    "pydantic-settings>=2.0",
+    "pydantic-settings>=2.14.2",
 ]
 docs = [
     "sphinx>=8.0",
