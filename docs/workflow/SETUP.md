@@ -69,9 +69,7 @@ gh api --method POST repos/OWNER/REPO/rulesets --input - <<'JSON'
       "parameters": {
         "strict_required_status_checks_policy": true,
         "required_status_checks": [
-          {"context": "Qualité (black + ruff)"},
-          {"context": "Typage (mypy strict)"},
-          {"context": "Sécurité (bandit)"},
+          {"context": "Qualité + Typage + Sécurité"},
           {"context": "Tests + couverture ≥ 95 %"},
           {"context": "Build package"}
         ]
