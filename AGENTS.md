@@ -194,6 +194,29 @@ Un hook `pre-commit` de type `commit-msg` (`no-ai-attribution`) **rejette automa
 tout commit dont le message contient une formulation interdite.
 Ce contrôle est également rejoué en CI (job `commit-policy` dans `ci.yml`).
 
+## Démarrage de session (ritual obligatoire)
+
+**À faire en tout premier, avant toute modification de fichier :**
+
+1. **Lire `docs/ai_workflow/state/lock.yaml`**
+   - `locked: true` + `expires_at` futur → stop. Un autre outil est actif.
+   - `locked: true` + `expires_at` dépassé → verrou orphelin → suivre la procédure de recovery.
+   - `locked: false` → continuer.
+
+2. **Lire `docs/ai_workflow/state/queue.yaml`** — identifier le backlog actif (`status: IN_PROGRESS`)
+   ou le prochain à démarrer (`status: READY`).
+
+3. **Lire `docs/ai_workflow/runs/BL-XXX/status.yaml`** du run en cours
+   — connaître l'étape atteinte et le rôle en cours.
+
+4. **Lire `docs/ai_workflow/runs/BL-XXX/07_handoff.md`** — note de passation
+   laissée par la session précédente.
+
+5. **Annoncer** : état du verrou, backlog concerné, dernière étape accomplie, prochaine action.
+   Puis poser le verrou (`locked: true`, `expires_at: +2h`) et démarrer.
+
+Ce ritual s'applique que la session reprenne un travail interrompu ou démarre un nouveau backlog.
+
 ## Gestion du verrou de travail
 
 Un seul outil peut travailler à un instant donné. Le verrou est géré via :
