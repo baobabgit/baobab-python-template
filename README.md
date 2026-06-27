@@ -1,5 +1,8 @@
 # Example Package
 
+[![Integration](https://github.com/your-org/your-repo/actions/workflows/integration.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/integration.yml)
+[![Release](https://github.com/your-org/your-repo/actions/workflows/release.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/release.yml)
+[![PyPI version](https://img.shields.io/pypi/v/example-package.svg)](https://pypi.org/project/example-package/)
 [![Python versions](https://img.shields.io/pypi/pyversions/example-package.svg)](https://pypi.org/project/example-package/)
 <!-- Badge Read the Docs : à réactiver une fois l'hébergement de doc configuré.
 [![Documentation Status](https://readthedocs.org/projects/your-repo/badge/?version=latest)](https://your-repo.readthedocs.io/en/latest/)
