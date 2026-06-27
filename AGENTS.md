@@ -229,9 +229,29 @@ Les contrats publics sont dans `docs/contracts/`. La matrice de compatibilité e
 `docs/integrations/compatibility_matrix.yaml`. Les rapports d'intégration sont dans
 `docs/integrations/reports/`.
 
+### Mécanisme d'intégration : git-ref directe
+
+La validation inter-librairies se fait via **référence git directe** sur la branche
+`version/vX.Y.Z` — aucune publication sur TestPyPI n'est requise.
+
+**Côté producteur** (cette librairie) :
+1. Atteindre `INTERNAL_VALIDATED` (`bl/` tous mergés, CI verte sur `version/`).
+2. Déclarer les consommateurs à valider dans `compatibility_matrix.yaml` (`status: PENDING`).
+3. Communiquer la branche aux consommateurs : `version/vX.Y.Z`.
+
+**Côté consommateur** (librairie qui dépend de ce package) :
+1. Remplacer la dépendance stable par la git-ref dans `pyproject.toml` :
+   ```
+   "example-package @ git+https://github.com/OWNER/REPO.git@version/vX.Y.Z"
+   ```
+2. Exécuter `uv sync` puis `make all` (ou `uv run pytest tests/integration/`).
+3. Reporter le résultat (`PASSED` / `FAILED`) dans la `compatibility_matrix.yaml`
+   du producteur et produire un rapport dans `docs/integrations/reports/`.
+4. Revenir à la dépendance PyPI une fois la release publiée.
+
 Une version est `INTEGRATION_VALIDATED` si : validation interne réussie, dépendances
-compatibles, librairies consommatrices requises ont validé l'intégration, rapports
-d'intégration présents, matrices de compatibilité à jour.
+compatibles, librairies consommatrices requises ont validé l'intégration (`status: PASSED`),
+rapports d'intégration présents, matrices de compatibilité à jour.
 
 ## Workflow
 

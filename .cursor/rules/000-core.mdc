@@ -1,13 +1,24 @@
 ---
-description: Règles de développement du projet (source unique de vérité)
+description: Point d'entrée des règles — référence vers AGENTS.md et les règles spécialisées
 globs:
 alwaysApply: true
 ---
 
 # Règles de développement
 
-La **source unique de vérité** des règles de ce projet est le fichier [`AGENTS.md`](../../AGENTS.md)
-à la racine du dépôt. **Lis-le et applique-le intégralement.** Ne duplique pas son contenu.
+La **source unique de vérité** est [`AGENTS.md`](../../AGENTS.md) à la racine.
+**Lis-le intégralement avant toute action.** Ne duplique pas son contenu ici.
+
+Règles spécialisées Cursor (pour le contexte automatique) :
+
+| Fichier | Domaine |
+|---------|---------|
+| `00-global-workflow.mdc` | Workflow IA, verrou, handoff, recovery |
+| `10-python-oop.mdc` | Python OOP, type hints, docstrings RST |
+| `20-tests-coverage.mdc` | Tests pytest, couverture ≥ 95 %, miroir |
+| `30-documentation-rst.mdc` | Sphinx, RST, Diátaxis |
+| `40-git-workflow.mdc` | Modèle Git 3 niveaux, commits BL-XXX |
+| `50-no-ai-attribution.mdc` | Interdiction attribution IA (appliquée toujours) |
 
 Rappels prioritaires (le détail complet est dans `AGENTS.md`) :
 
