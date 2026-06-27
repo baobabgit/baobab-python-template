@@ -7,6 +7,43 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Non publié]
 
+### Ajouté
+
+- `scripts/sync_from_template.sh` : script de synchronisation sélective des
+  fichiers infra (CI, règles IA, outils) depuis le template source vers un projet
+  dérivé, sans toucher au code ni aux métadonnées du projet.
+- `docs/guides/how-to/template-sync.rst` : guide RST décrivant la procédure de
+  synchronisation depuis le template (remote upstream, script, révisions manuelles).
+- `docs/ai_workflow/roles/orchestrateur.md` : prompt prêt à coller pour le rôle
+  orchestrateur — gère la reprise de session, le verrou et les quatre cas possibles
+  au démarrage.
+- `.cursor/rules/00-global-workflow.mdc` : règle Cursor `alwaysApply: true` pour
+  le ritual de démarrage de session et la gestion du verrou.
+- Ritual de démarrage de session obligatoire dans `AGENTS.md` : lecture de
+  `lock.yaml` → `queue.yaml` → `status.yaml` → `07_handoff.md`, annonce de l'état,
+  pose du verrou avant toute modification.
+
+### Modifié
+
+- `ci.yml` : ajout de `uv audit` comme gate bloquant de vulnérabilités des
+  dépendances (après Bandit), sans `continue-on-error`.
+- `scripts/setup_github.sh` : contextes du ruleset mis à jour pour correspondre
+  aux noms de jobs CI actuels (`Qualité + Typage + Sécurité`,
+  `Tests + couverture ≥ 95 %`, `Build package`).
+- `docs/guides/index.rst` : ajout des entrées `integration-validation` et
+  `template-sync` dans le toctree how-to.
+
+### Corrigé
+
+- `README.md` : seuil de couverture 90 % → 95 %, chemin de tests
+  `tests/example_package/` → `tests/unit/example_package/`, référence pip-audit
+  supprimée.
+- `docs/workflow/SETUP.md` : noms de jobs dans le JSON du ruleset corrigés pour
+  correspondre à la CI fusionnée.
+- `noxfile.py` : violation E501 corrigée (ligne bandit découpée).
+- `scripts/check_no_ai_attribution.py` : violations E501, PTH123 (`open()` →
+  `Path.read_text()`), PLR2004 (constante `_MIN_ARGS` au lieu de valeur magique).
+
 ### Modifié (évolution du template — nouveau cahier des charges)
 
 - **Gestionnaire de dépendances** : migration de `pip`/`venv` vers `uv` ; `uv.lock`

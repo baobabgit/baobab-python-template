@@ -53,6 +53,8 @@ jobs:
           sarif_file: bandit.sarif
       - name: Bandit (gate)
         run: uv run bandit -c pyproject.toml -r src
+      - name: uv audit (vulnérabilités des dépendances)
+        run: uv audit
 
   tests:
     name: Tests + couverture ≥ 95 %
