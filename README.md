@@ -37,7 +37,7 @@
 ## À propos
 
 Ce dépôt est un **template de développement**. Il fixe des règles claires
-(orienté objet, 1 classe par fichier, typage strict, tests ≥ 90 %, doc RST) et
+(orienté objet, 1 classe par fichier, typage strict, tests ≥ 95 %, doc RST) et
 les rend applicables par **trois assistants IA** via une source unique de vérité
 (`AGENTS.md`). Objectif : produire un code homogène **sans rappeler les règles à
 chaque prompt**.
@@ -47,7 +47,7 @@ chaque prompt**.
 - 🤖 **Règles multi-IA unifiées** : `AGENTS.md` (source unique) lu par Codex,
   importé par `CLAUDE.md`, reflété dans `.cursor/rules/`.
 - 🧱 **Conventions POO strictes** : 1 classe = 1 fichier, tests en arborescence miroir.
-- ✅ **Qualité garantie** : `ruff` + `mypy` strict + `pytest` (couverture ≥ 90 %),
+- ✅ **Qualité garantie** : `ruff` + `mypy` strict + `pytest` (couverture ≥ 95 %),
   doublés de `pre-commit` et d'une CI GitHub Actions.
 - 📚 **Documentation Sphinx/RST** : spécifications (US/FEAT), API (autodoc), guides (Diátaxis).
 - 🗂️ **Traçabilité** besoin → code → test via les identifiants `US / FEAT / TASK`.
@@ -89,7 +89,7 @@ Besoin (docs/specifications, RST)
 ├── CLAUDE.md             # Adaptateur Claude Code (importe AGENTS.md)
 ├── .cursor/rules/        # Adaptateur Cursor (reflète AGENTS.md)
 ├── src/example_package/  # Code (1 classe par fichier)
-├── tests/example_package/# Tests en miroir de src/
+├── tests/unit/example_package/ # Tests en miroir de src/
 ├── docs/                 # Sphinx : specifications/ · api/ · guides/
 │   └── workflow/         # Process multi-IA : rôles, gates, handoff, prompts
 ├── .github/              # CI + templates d'issues (US/FEAT/Task) + PR
@@ -133,7 +133,7 @@ cp .env.example .env
 - **Aucun secret** dans le code ni dans Git : `.env` est gitignoré ; seul
   `.env.example` (sans valeurs) est versionné.
 - Le hook `detect-private-key` et `pre-commit` bloquent les fuites évidentes.
-- Analyse `bandit` (SAST) + `pip-audit` (vulns des dépendances) + Dependabot.
+- Analyse `bandit` (SAST) + Dependabot alerts (vulns des dépendances).
 - Signalez toute vulnérabilité en privé (voir [`SECURITY.md`](SECURITY.md)) plutôt
   que via une issue publique.
 

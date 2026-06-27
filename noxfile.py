@@ -13,7 +13,9 @@ def quality(session: nox.Session) -> None:
     session.run("uv", "run", "black", "--check", "src", "tests", external=True)
     session.run("uv", "run", "ruff", "check", "src", "tests", external=True)
     session.run("uv", "run", "mypy", "src", external=True)
-    session.run("uv", "run", "bandit", "-r", "src", "-c", "pyproject.toml", external=True)
+    session.run(
+        "uv", "run", "bandit", "-r", "src", "-c", "pyproject.toml", external=True
+    )
 
 
 @nox.session
