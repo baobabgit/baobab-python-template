@@ -37,6 +37,7 @@ if gh api --method POST "repos/${REPO}/rulesets" --input - >/dev/null 2>&1 <<'JS
         "required_status_checks": [
           {"context": "Qualité + Typage + Sécurité"},
           {"context": "Tests + couverture ≥ 95 %"},
+          {"context": "Traçabilité (specs → backlog → runs)"},
           {"context": "Build package"}
         ]
       }
