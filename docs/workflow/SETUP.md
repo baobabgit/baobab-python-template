@@ -71,6 +71,7 @@ gh api --method POST repos/OWNER/REPO/rulesets --input - <<'JSON'
         "required_status_checks": [
           {"context": "Qualité + Typage + Sécurité"},
           {"context": "Tests + couverture ≥ 95 %"},
+          {"context": "Traçabilité (specs → backlog → runs)"},
           {"context": "Build package"}
         ]
       }
